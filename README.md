@@ -1,5 +1,5 @@
 ##RGBA 2 BW
-the function of this responsotory is tranforming RGBA png into black & white PNG.
+the function of this responsotory is tranforming ARGB png into black & white png.
  
  
  
@@ -11,8 +11,8 @@ download libpng here >> [http://www.libpng.org/pub/png/libpng.html](http://www.l
 
 * Simple installation  : On Unix/Linux and similar systems, you can simply type
 
-./configure [--prefix=/path]
+  - $ ./configure [--prefix=/path]
 
-make check
+  - $ make check
 
-make install
+  - $ make install
