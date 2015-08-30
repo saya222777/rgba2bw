@@ -5,6 +5,10 @@
 #include <assert.h>
 #include <time.h>
 
+#include "imgio.h"
+#include "rgba2bw_modified.h"
+#include "rgba2bw_origin.h"
+
 #define R 0
 #define G 1
 #define B 2
@@ -19,6 +23,4 @@ extern static png_bytep row_pointers[height];
 
 void rgba2bw_modified(uint32_t *bitmap);
 void rgba2bw_origin(uint32_t *bitmap);
-int png_check(char name);
-int png_read(char name);
-int png_write(char name);
+

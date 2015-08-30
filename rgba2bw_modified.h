@@ -1,0 +1,1 @@
+void rgba2bw_modified(uint32_t *bitmap);
