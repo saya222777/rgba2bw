@@ -203,6 +203,10 @@ int png_write(char * name){
 	/* 	If you have no special needs in this area, let the library do what it wants by not calling
 		this function at all, as it has been tuned to deliver a good speed/compression ratio. */
 
+	png_set_swap_alpha(png_ptr);
+	png_set_swap_alpha(png_ptr);
+	png_set_swap_alpha(png_ptr);
+
 	bit_depth = 8;
 	color_type = PNG_COLOR_TYPE_RGB_ALPHA;
 	png_set_IHDR(png_ptr, info_ptr, width, height, bit_depth, color_type, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
