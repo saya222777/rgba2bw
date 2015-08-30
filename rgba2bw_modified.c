@@ -1,11 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <inttypes.h>
-#define R 0
-#define G 1
-#define B 2
+#include "conf.h"
 
-uint32_t *rgba2bw(uint32_t **img,int height,int width){
+void rgba2bw(uint32_t **img, uint32_t **bwimg, int height,int width){
 
     /* build the table ----------------------------------------------------*/
     uint32_t val = 0;
@@ -17,7 +12,6 @@ uint32_t *rgba2bw(uint32_t **img,int height,int width){
     }
 
    /* convert the pixel data from RGBA to BW --------------- */
-    uint32_t bwimg[height][width];
     int row, col;
     uint32_t a,r,g,b,bw;
     for(row = 0; row < height; row++) {
@@ -36,9 +30,4 @@ uint32_t *rgba2bw(uint32_t **img,int height,int width){
                 bwimg[row][col] = (a << 24) + (bw << 16) + (bw << 8) + (bw);
             }
     }
-    return *bwimg;
-}
-
-void main() {
-    /* code */
 }
