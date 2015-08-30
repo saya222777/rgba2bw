@@ -5,10 +5,6 @@
 #include <assert.h>
 #include <time.h>
 
-#include "rgba2bw_modified.c"
-#include "rgba2bw_origin.c"
-#include "imgio.c"
-
 #define R 0
 #define G 1
 #define B 2
