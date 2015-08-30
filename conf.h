@@ -20,7 +20,5 @@ extern static long stride = 0;
 extern static png_byte bit_depth;
 extern static png_byte color_type;
 extern static png_bytep row_pointers[height];
-
-void rgba2bw_modified(uint32_t *bitmap);
-void rgba2bw_origin(uint32_t *bitmap);
+extern static png_bytep pixels;
 

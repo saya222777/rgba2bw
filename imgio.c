@@ -156,6 +156,7 @@ int png_read(char name){
 	}
 
 	stride = png_get_rowbytes(png_ptr, info_ptr) /4;
+	png_bytep pixels = (png_bytep) malloc(height * stride);
 
 	// load IDAT 
 	row_pointers = (png_bytep*)calloc(height, sizeof(png_bytep));
