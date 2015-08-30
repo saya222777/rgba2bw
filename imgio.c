@@ -102,7 +102,7 @@ int png_read(char name){
 
 
 	// ============================================
-	// read  IDAT (image content)
+	// modify the read  IDAT (image content)
 	// ============================================
 
 	// first, we have to deal with the different data type for each color type.
@@ -140,7 +140,7 @@ int png_read(char name){
 
 	// add alpha channel ========================
 	// we use ARGB here
- 	if (color_type == PNG_COLOR_TYPE_RGB) png_set_filler(png_ptr, filler, PNG_FILLER_BEFORE);
+ 	if (color_type == PNG_COLOR_TYPE_RGB) png_set_filler(png_ptr, 0xFF, PNG_FILLER_BEFORE);
  	if (color_type == PNG_COLOR_TYPE_RGB) {
  		png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_BEFORE);
  		color_type = PNG_COLOR_TYPE_RGB_ALPHA;
@@ -158,6 +158,80 @@ int png_read(char name){
 	// load IDAT 
 	row_pointers = (png_bytep*)calloc(height, sizeof(png_bytep));
 	png_read_image(png_ptr, row_pointers);
+
+	fclose(fp);
+	return 1;
+}
+
+
+int png_write(char name){
+	FILE *fp = fopen (name, "wb");
+	if(fp == NULL) {
+		printf("image opening failed.\n");
+		return 0;
+	}
+
+	png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+	assert(png_ptr);
+
+	png_infop info_ptr = png_create_info_struct(png_ptr);
+	if (!info_ptr)
+	{
+		png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
+		printf("png_create_info_struct() failed.\n", );
+		return 0;
+	}
+
+	if (setjmp(png_jmpbuf(png_ptr))){
+		png_destroy_write_struct(&png_ptr, &info_ptr);
+		printf("setjmp() failed.\n", );
+		fclose(fp);
+		return 0;
+	}
+
+	png_init_io(png_ptr, fp);
+
+	// about the filter (from libpng manual) :
+	/* 	If you have no special needs in this area, let the library do what it wants by not calling
+		this function at all, as it has been tuned to deliver a good speed/compression ratio. */
+
+	bit_depth = 8;
+	color_type = PNG_COLOR_TYPE_RGB_ALPHA;
+	png_set_IHDR(png_ptr, info_ptr, width, height, bit_depth, color_type, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT)
+	//png_set_IHDR(png_ptr, info_ptr, width, height, bit_depth, color_type, interlace_type, compression_type, filter_method)
+	/* 	width - 		holds the width of the image in pixels (up to 2ˆ31). 
+		height - 	holds the height of the image in pixels (up to 2ˆ31).
+		bit_depth - 	holds the bit depth of one of the image channels. (valid values are 1, 2, 4, 8, 16 and depend also on the color_type. See also significant 	bits (sBIT) below).
+		color_type - 	describes which color/alpha channels are present. 
+				PNG_COLOR_TYPE_GRAY (bit depths 1, 2, 4, 8, 16)
+				PNG_COLOR_TYPE_GRAY_ALPHA (bit depths 8, 16)
+				PNG_COLOR_TYPE_PALETTE (bit depths 1, 2, 4, 8)
+				PNG_COLOR_TYPE_RGB (bit_depths 8, 16)
+				PNG_COLOR_TYPE_RGB_ALPHA (bit_depths 8, 16)
+				PNG_COLOR_MASK_PALETTE 
+				PNG_COLOR_MASK_COLOR
+				PNG_COLOR_MASK_ALPHA
+		interlace_type - PNG_INTERLACE_NONE or  PNG_INTERLACE_ADAM7
+		compression_type - (must be PNG_COMPRESSION_TYPE_DEFAULT)
+		filter_method - (must be PNG_FILTER_TYPE_DEFAULT or, if you are writing a PNG to be embedded in a MNG datastream, can also be PNG_INTRAPIXEL_DIFFERENCING) */
+
+	// png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL)
+	/* 	PNG_TRANSFORM_IDENTITY 			No transformation
+		PNG_TRANSFORM_PACKING 			Pack 1, 2 and 4-bit samples
+		PNG_TRANSFORM_PACKSWAP 			Change order of packed pixels to LSB first
+		PNG_TRANSFORM_INVERT_MONO 		Invert monochrome images
+		PNG_TRANSFORM_SHIFT 			Normalize pixels to the sBIT depth
+		PNG_TRANSFORM_BGR 			Flip RGB to BGR, RGBA to BGRA
+		PNG_TRANSFORM_SWAP_ALPHA 		Flip RGBA to ARGB or GA to AG
+		PNG_TRANSFORM_INVERT_ALPHA 		Change alpha from opacity to transparency
+		PNG_TRANSFORM_SWAP_ENDIAN 		Byte-swap 16-bit samples 
+		PNG_TRANSFORM_STRIP_FILLER 		Strip out filler bytes (deprecated).
+		PNG_TRANSFORM_STRIP_FILLER_BEFORE 	Strip out leading filler bytes
+		PNG_TRANSFORM_STRIP_FILLER_AFTER 	Strip out trailing filler bytes */
+
+	png_write_info(png_ptr, info_ptr);
+
+	png_write_image(png_ptr, row_pointers);
 
 	fclose(fp);
 	return 1;

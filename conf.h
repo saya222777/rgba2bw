@@ -16,5 +16,9 @@ extern static int height = 0;
 extern static int weight = 0;
 extern static png_byte bit_depth;
 extern static png_byte color_type;
+extern static png_bytep row_pointers[height];
 
 void rgba2bw(uint32_t **img, uint32_t **bwimg, int height,int width);
+int png_check(char name);
+int png_read(char name);
+int png_write(char name);
