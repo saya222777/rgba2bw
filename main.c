@@ -15,8 +15,8 @@ void main() {
 
 	// test code start ====================================
 
-	rgba2bw_modified((uint32_t *) *row_pointers);
-	// rgba2bw_origin((uint32_t *) *row_pointers);
+	rgba2bw_modified((uint32_t *) row_pointers);
+	// rgba2bw_origin((uint32_t *) row_pointers);
 
 	// test code end =====================================
 

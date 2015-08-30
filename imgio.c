@@ -20,7 +20,7 @@ int png_check(char * name){
 	return 0;
 }
 
-int png_read(char * name){
+int png_read(char *name){
 
 	/* open the file */
 	FILE *fp = fopen(name,"rb");
@@ -157,10 +157,14 @@ int png_read(char * name){
 	}
 
 	stride = png_get_rowbytes(png_ptr, info_ptr) /4;
-	png_bytep pixels = (png_bytep) malloc(height * stride);
+	png_bytep pixels = (png_bytep) malloc(height * stride * 4);
+
+        	row_pointers = (png_bytep*)malloc(sizeof(png_bytep) * height);
+	for(int y = 0; y < height; y++) {
+	                row_pointers[y] = pixels + stride * 4 * y;
+	}
 
 	// load IDAT 
-	row_pointers = (png_bytep*)calloc(height, sizeof(png_bytep));
 	png_read_image(png_ptr, row_pointers);
 
 	fclose(fp);
