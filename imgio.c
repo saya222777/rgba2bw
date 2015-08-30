@@ -1,6 +1,6 @@
 #include "conf.h"
 
-int png_check(char name){
+int png_check(char * name){
 
 	/* open the file */
 	FILE *fp = fopen(name,"rb");
@@ -17,9 +17,10 @@ int png_check(char name){
 		fclose(fp);
 		return 1;
 	}
+	return 0;
 }
 
-int png_read(char name){
+int png_read(char * name){
 
 	/* open the file */
 	FILE *fp = fopen(name,"rb");
@@ -39,13 +40,13 @@ int png_read(char name){
 	png_infop info_ptr = png_create_info_struct(png_ptr);
 	if (!info_ptr){
 		png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
-		printf("png_create_info_struct() failed.\n", );
+		printf("png_create_info_struct() failed.\n");
 		return 0;
 	}
 
 	if (setjmp(png_jmpbuf(png_ptr))){
 		png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
-		printf("setjmp() failed.\n", );
+		printf("setjmp() failed.\n");
 		fclose(fp);
 		return 0;
 	}
@@ -167,7 +168,7 @@ int png_read(char name){
 }
 
 
-int png_write(char name){
+int png_write(char * name){
 	FILE *fp = fopen (name, "wb");
 	if(fp == NULL) {
 		printf("image opening failed.\n");
@@ -181,13 +182,13 @@ int png_write(char name){
 	if (!info_ptr)
 	{
 		png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
-		printf("png_create_info_struct() failed.\n", );
+		printf("png_create_info_struct() failed.\n");
 		return 0;
 	}
 
 	if (setjmp(png_jmpbuf(png_ptr))){
 		png_destroy_write_struct(&png_ptr, &info_ptr);
-		printf("setjmp() failed.\n", );
+		printf("setjmp() failed.\n");
 		fclose(fp);
 		return 0;
 	}
@@ -200,7 +201,7 @@ int png_write(char name){
 
 	bit_depth = 8;
 	color_type = PNG_COLOR_TYPE_RGB_ALPHA;
-	png_set_IHDR(png_ptr, info_ptr, width, height, bit_depth, color_type, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT)
+	png_set_IHDR(png_ptr, info_ptr, width, height, bit_depth, color_type, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 	//png_set_IHDR(png_ptr, info_ptr, width, height, bit_depth, color_type, interlace_type, compression_type, filter_method)
 	/* 	width - 		holds the width of the image in pixels (up to 2ˆ31). 
 		height - 	holds the height of the image in pixels (up to 2ˆ31).

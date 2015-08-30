@@ -8,8 +8,8 @@ void main() {
 	int counter1=2;
 	int counter2;
 
-	png_check(ExampleImg.png);
-	png_read(ExampleImg.png);
+	png_check("ExampleImg.png");
+	png_read("ExampleImg.png");
 
 	clock_gettime(CLOCK_MONOTONIC, &time_stamp1);
 
@@ -26,5 +26,5 @@ void main() {
 	DueTime = DueTime_s + DueTime_ns;
 	printf("Due time = %7f seconds\n\r",DueTime*0.000000001);
 
-	png_write(ResultImg.png);
+	png_write("ResultImg.png");
 }
