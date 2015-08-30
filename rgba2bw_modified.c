@@ -1,6 +1,6 @@
 #include "conf.h"
 
-void rgba2bw(uint32_t **img, uint32_t **bwimg, int height,int width){
+void rgba2bw_modified(uint32_t *bitmap){
 
     /* build the table ----------------------------------------------------*/
     uint32_t val = 0;
@@ -13,21 +13,22 @@ void rgba2bw(uint32_t **img, uint32_t **bwimg, int height,int width){
 
    /* convert the pixel data from RGBA to BW --------------- */
     int row, col;
-    uint32_t a,r,g,b,bw;
+    uint32_t a,r,g,b,bw,pixel;
     for(row = 0; row < height; row++) {
             for(col = 0; col < width; col++) {
-                b = img[row][col] & 0xff;
+                pixel = bitmap[col + row + stride];
+                b = pixel & 0xff;
                 b = table[b][B];
-                img[row][col]=img[row][col]>>8;
-                g = img[row][col] & 0xff;
+                pixel = pixel>>8;
+                g = pixel & 0xff;
                 g = table[g][G];
-                img[row][col]=img[row][col]>>8;
-                r = img[row][col] & 0xff;
+                pixel = pixel>>8;
+                r = pixel & 0xff;
                 r = table[r][R];
-                img[row][col]=img[row][col]>>8;
-                a = img[row][col] & 0xff;
-                bw=r+g+b;
-                bwimg[row][col] = (a << 24) + (bw << 16) + (bw << 8) + (bw);
+                pixel = pixel>>8;
+                a = pixel & 0xff;
+                bw = (uint32_t) (r+g+b);
+                bitmap[col + row * stride] = (a << 24) + (bw << 16) + (bw << 8) + (bw);
             }
     }
 }
